@@ -24,7 +24,6 @@ type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) 
 
 const PRESET_API_KEY_1 = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
 const PRESET_API_KEY_2 = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
-const PRESET_API_KEY_3 = "AIzaSyA0m_s643t2K2B5K72i_pZ4v8j1o6Y9c9c";
 
 
 export default function Home() {
@@ -59,7 +58,7 @@ export default function Home() {
   }, []);
 
   const handleSaveApiKey = () => {
-    localStorage.setItem("gemini_api_key", apiKeyRef.current);
+    localStorage.setItem("gemini_api_key", apiKey);
     setIsSettingsOpen(false);
     toast({
         title: "API Key Saved",
@@ -282,7 +281,6 @@ export default function Home() {
                        <div className="flex gap-2">
                           <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_1)}>Preset 1</Button>
                           <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_2)}>Preset 2</Button>
-                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_3)}>Preset 3</Button>
                         </div>
                       <Input
                           id="api-key"
