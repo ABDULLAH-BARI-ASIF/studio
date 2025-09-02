@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, BrainCircuit, Settings } from "lucide-react";
+import { Sparkles, BrainCircuit, Settings, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { useTheme } from "next-themes";
 
 import { fillInTheGaps, type FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
 import { generatePartOfSpeechDiagram, type PartOfSpeechDiagramOutput } from "@/ai/flows/part-of-speech-diagram-generation";
@@ -38,6 +39,8 @@ export default function Home() {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const { theme, setTheme } = useTheme();
+
 
   useEffect(() => {
     // Ensure this runs only on the client
@@ -141,15 +144,9 @@ export default function Home() {
     <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
-           <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">
-            English Grammar AI
-          </div>
           <h1 className="font-headline text-4xl font-bold tracking-tighter text-foreground sm:text-5xl">
-            Q Analyzer
+            Grammalyzer
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Your intelligent assistant for sentence structures and grammar explanations.
-          </p>
           <div className="absolute top-0 right-0">
             <Button variant="ghost" size="icon" onClick={() => setIsSettingsOpen(true)}>
                 <Settings className="h-6 w-6" />
@@ -170,42 +167,42 @@ export default function Home() {
         </div>
 
         {mode === 'pos' && (
-            <Card className="border-0 bg-secondary shadow-lg animate-in fade-in-0 duration-500">
+            <Card className="border shadow-lg animate-in fade-in-0 duration-500">
                 <CardContent className="p-6 space-y-4">
                     <Label className="text-sm font-medium text-muted-foreground">Enter a sentence to analyze</Label>
                     <Textarea
                     placeholder="Type your sentence here... e.g., 'The cat sat on the mat.'"
                     value={posSentence}
                     onChange={(e) => setPosSentence(e.target.value)}
-                    className="min-h-[120px] resize-none border-border/50 bg-background/50 text-base focus-visible:ring-primary"
+                    className="min-h-[120px] resize-none text-base focus-visible:ring-primary"
                     />
                 </CardContent>
             </Card>
         )}
 
         {mode === 'gaps' && (
-            <Card className="border-0 bg-secondary shadow-lg animate-in fade-in-0 duration-500">
+            <Card className="border shadow-lg animate-in fade-in-0 duration-500">
                 <CardContent className="p-6 space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                        <Input id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary"/>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div className="space-y-2">
                             <Label htmlFor="option-a" className="text-sm font-medium text-muted-foreground">Option A (optional)</Label>
-                            <Input id="option-a" placeholder="e.g., on" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                            <Input id="option-a" placeholder="e.g., on" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary"/>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="option-b" className="text-sm font-medium text-muted-foreground">Option B (optional)</Label>
-                            <Input id="option-b" placeholder="e.g., in" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                            <Input id="option-b" placeholder="e.g., in" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary"/>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="option-c" className="text-sm font-medium text-muted-foreground">Option C (optional)</Label>
-                            <Input id="option-c" placeholder="e.g., at" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                            <Input id="option-c" placeholder="e.g., at" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary"/>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
-                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
                         </div>
                     </div>
                 </CardContent>
@@ -229,7 +226,7 @@ export default function Home() {
         <div className="w-full">
           {isLoading && <ResultSkeleton />}
           {!isLoading && analysisResult && (
-             <Card className="border-0 bg-secondary shadow-lg">
+             <Card className="border shadow-lg">
                 <CardContent className="p-6">
                     <ResultDisplay result={analysisResult} />
                 </CardContent>
@@ -255,7 +252,7 @@ export default function Home() {
               <DialogHeader>
                   <DialogTitle>Settings</DialogTitle>
                   <DialogDescription>
-                      Manage your API configurations here.
+                      Manage your API and theme configurations here.
                   </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -271,13 +268,18 @@ export default function Home() {
                           type="password"
                       />
                   </div>
+                   <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Theme</Label>
+                        <div className="col-span-3 flex items-center">
+                            <Button variant="outline" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+                                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                <span className="sr-only">Toggle theme</span>
+                            </Button>
+                        </div>
+                    </div>
               </div>
               <DialogFooter>
-                  <DialogClose asChild>
-                      <Button type="button" variant="secondary">
-                          Cancel
-                      </Button>
-                  </DialogClose>
                   <Button type="submit" onClick={handleSaveApiKey}>Save changes</Button>
               </DialogFooter>
           </DialogContent>
@@ -285,5 +287,3 @@ export default function Home() {
     </main>
   );
 }
-
-    

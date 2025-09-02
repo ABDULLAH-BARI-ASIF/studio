@@ -20,6 +20,7 @@ export default {
         sans: ['var(--font-inter)'],
         body: ['var(--font-literata)'],
         headline: ['var(--font-literata)'],
+        bangla: ['var(--font-tiro-bangla)'],
         code: ['monospace'],
       },
       colors: {

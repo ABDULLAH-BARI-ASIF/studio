@@ -23,7 +23,7 @@ const prompt = ai.definePrompt({
   name: 'partOfSpeechDiagramPrompt',
   input: {schema: PartOfSpeechDiagramInputSchema},
   output: {schema: PartOfSpeechDiagramOutputSchema},
-  prompt: `You are an expert linguist. Generate a detailed part-of-speech diagram for the following sentence. 
+  prompt: `You are an expert linguist. Generate a detailed part-of-speech analysis for the following sentence. 
   
 Your analysis must be thorough. Identify not just basic parts of speech, but also more specific categories like:
 - Proper nouns
@@ -34,7 +34,7 @@ Your analysis must be thorough. Identify not just basic parts of speech, but als
 - Prepositions
 - Interjections
 
-Use markdown formatting to create the diagram, clearly indicating each word's detailed part of speech. Return only the diagram. Do not provide any introduction or conclusion. Just return the diagram in markdown format.
+Return the analysis as plain text, clearly indicating each word's detailed part of speech. Do not provide any introduction, conclusion, or markdown formatting.
 
 Sentence: {{{sentence}}}`,
 });

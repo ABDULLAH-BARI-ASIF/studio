@@ -20,11 +20,11 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
   if (isFillInTheGapsOutput(result)) {
     return (
-        <div className="space-y-6 animate-in fade-in-0 duration-500 font-body">
+        <div className="space-y-6 animate-in fade-in-0 duration-500 font-bangla">
             
             <div className="space-y-2">
                 <p className="text-sm font-medium text-muted-foreground">Question</p>
-                <p className="text-foreground/90 text-lg leading-relaxed bg-background/50 p-4 rounded-md">
+                <p className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md font-sans">
                     {result.question.replace(/_/g, `__${result.correctAnswer}__`)}
                 </p>
             </div>
@@ -51,10 +51,10 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
   return (
     <div className="space-y-4 animate-in fade-in-0 duration-500 font-body">
         <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Part of Speech Diagram
+            Part of Speech Analysis
         </h2>
-        <div className="text-sm bg-background/50 p-4 rounded-lg overflow-x-auto">
-            <pre className="text-base"><code>{result.diagram}</code></pre>
+        <div className="text-sm bg-muted p-4 rounded-lg overflow-x-auto">
+            <p className="text-base whitespace-pre-wrap">{result.diagram}</p>
         </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ResultSkeleton = () => {
   return (
-    <Card className="border-0 bg-secondary shadow-lg">
+    <Card className="border shadow-lg">
       <CardHeader>
         <Skeleton className="h-7 w-48" />
       </CardHeader>
