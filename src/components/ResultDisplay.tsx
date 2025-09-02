@@ -7,63 +7,58 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Fragment } from "react";
+import { FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
 
-export type AnalysisResult = {
-  completedSentence?: string;
-  grammarRuleExplanation?: string;
-  partOfSpeechDiagram: string;
-};
+type AnalysisResult = FillInTheGapsOutput | { diagram: string };
 
 type ResultDisplayProps = {
   result: AnalysisResult;
 };
 
-const ResultDisplay = ({ result }: ResultDisplayProps) => {
-  const sections = [
-    {
-      title: "Completed Sentence",
-      content: result.completedSentence,
-      isCode: false,
-    },
-    {
-      title: "Grammar Rule (Bangla)",
-      content: result.grammarRuleExplanation,
-      isCode: false,
-    },
-    {
-      title: "Part of Speech Diagram",
-      content: result.partOfSpeechDiagram,
-      isCode: true,
-    },
-  ];
+function isFillInTheGapsOutput(result: AnalysisResult): result is FillInTheGapsOutput {
+    return 'correctAnswer' in result;
+}
 
-  return (
-    <div className="space-y-6 animate-in fade-in-0 duration-500 font-body">
-      {sections.map(
-        (section) =>
-          section.content && (
-            <Fragment key={section.title}>
-              <Card className="shadow-md">
+const ResultDisplay = ({ result }: ResultDisplayProps) => {
+
+  if (isFillInTheGapsOutput(result)) {
+    return (
+        <div className="space-y-6 animate-in fade-in-0 duration-500 font-body">
+            <Card className="shadow-md">
                 <CardHeader>
-                  <CardTitle className="font-headline text-primary">
-                    {section.title}
-                  </CardTitle>
+                  <CardTitle className="font-headline text-primary">Correct Answer</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {section.isCode ? (
-                    <pre className="text-sm bg-muted p-4 rounded-lg overflow-x-auto">
-                      <code>{section.content}</code>
-                    </pre>
-                  ) : (
-                    <p className="text-foreground/90 text-base leading-relaxed">
-                      {section.content}
-                    </p>
-                  )}
+                    <p className="text-foreground/90 text-base leading-relaxed">{result.correctAnswer}</p>
                 </CardContent>
-              </Card>
-            </Fragment>
-          )
-      )}
+            </Card>
+            <Card className="shadow-md">
+                <CardHeader>
+                  <CardTitle className="font-headline text-primary">Explanation (Bangla)</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-foreground/90 text-base leading-relaxed">{result.explanation}</p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
+
+  // Part of Speech Diagram
+  return (
+    <div className="space-y-6 animate-in fade-in-0 duration-500 font-body">
+        <Card className="shadow-md">
+            <CardHeader>
+                <CardTitle className="font-headline text-primary">
+                Part of Speech Diagram
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <pre className="text-sm bg-muted p-4 rounded-lg overflow-x-auto">
+                    <code>{result.diagram}</code>
+                </pre>
+            </CardContent>
+        </Card>
     </div>
   );
 };

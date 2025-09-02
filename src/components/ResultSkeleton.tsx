@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const ResultSkeleton = () => {
   return (
     <div className="space-y-6">
-      {[1, 2, 3].map((i) => (
+      {[1, 2].map((i) => (
         <Card key={i}>
           <CardHeader>
             <CardTitle>
@@ -21,7 +21,6 @@ const ResultSkeleton = () => {
           <CardContent className="space-y-2">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-[80%]" />
-            <Skeleton className="h-4 w-[90%]" />
           </CardContent>
         </Card>
       ))}
