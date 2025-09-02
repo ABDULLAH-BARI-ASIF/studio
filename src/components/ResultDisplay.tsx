@@ -17,20 +17,6 @@ function isFillInTheGapsOutput(result: AnalysisResult): result is FillInTheGapsO
     return 'correctAnswer' in result;
 }
 
-// A simple hash function to get a color for a word
-const stringToColor = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    let color = '#';
-    for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xFF;
-        color += ('00' + value.toString(16)).substr(-2);
-    }
-    return color;
-}
-
 
 const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
@@ -73,12 +59,7 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
             {result.analysis.map((item, index) => (
                 <div key={index} className="flex items-center gap-4 text-base">
                     <span 
-                        className="font-bold text-lg px-2 py-1 rounded-md"
-                        style={{
-                            backgroundColor: stringToColor(item.word),
-                            color: '#fff',
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-                         }}
+                        className="font-bold text-lg text-primary"
                     >
                         {item.word}
                     </span>

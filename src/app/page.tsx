@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, BrainCircuit, Settings, Sun, Moon } from "lucide-react";
+import { Sparkles, BrainCircuit, Settings, Sun, Moon, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useTheme } from "next-themes";
 
 import { fillInTheGaps, type FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
@@ -102,6 +102,17 @@ export default function Home() {
       setIsLoading(false);
     }
   };
+  
+  const handleClear = () => {
+    setPosSentence("");
+    setGapsQuestion("");
+    setOptions(["", "", "", ""]);
+    setAnalysisResult(null);
+     toast({
+        title: "Cleared",
+        description: "Inputs and results have been cleared.",
+    });
+  }
 
   const handleExtensiveExplanation = async () => {
     if (!analysisResult || !('correctAnswer' in analysisResult)) return;
@@ -156,14 +167,14 @@ export default function Home() {
         </header>
 
         <div className="flex items-center justify-center space-x-4 py-4">
-            <Label htmlFor="mode-switch" className="text-base text-muted-foreground">Parts of Speech Analyzer</Label>
+            <Label htmlFor="mode-switch" className={`text-base transition-colors ${mode === 'pos' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>Parts of Speech Analyzer</Label>
             <Switch
                 id="mode-switch"
                 checked={mode === 'gaps'}
                 onCheckedChange={handleModeChange}
                 aria-label="Switch between analyzer modes"
             />
-            <Label htmlFor="mode-switch" className="text-base text-muted-foreground">Fill in the Gaps Explainer</Label>
+            <Label htmlFor="mode-switch" className={`text-base transition-colors ${mode === 'gaps' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>Fill in the Gaps Explainer</Label>
         </div>
 
         {mode === 'pos' && (
@@ -185,7 +196,7 @@ export default function Home() {
                 <CardContent className="p-6 space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                        <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary"/>
+                        <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y"/>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div className="space-y-2">
@@ -202,7 +213,7 @@ export default function Home() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
-                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.g. target.value)} className="focus-visible:ring-primary"/>
+                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
                         </div>
                     </div>
                 </CardContent>
@@ -284,6 +295,15 @@ export default function Home() {
               </DialogFooter>
           </DialogContent>
       </Dialog>
+        <Button
+            onClick={handleClear}
+            variant="outline"
+            size="icon"
+            className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-2xl bg-background/80 backdrop-blur-sm hover:bg-primary/10"
+            >
+            <Trash2 className="h-6 w-6" />
+            <span className="sr-only">Clear</span>
+        </Button>
     </main>
   );
 }
