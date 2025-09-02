@@ -1,1 +1,6 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/part-of-speech-diagram-generation.ts';
+import '@/ai/flows/fill-in-the-gaps-analysis.ts';
+import '@/ai/flows/grammar-rule-explanation-bangla.ts';
