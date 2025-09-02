@@ -19,7 +19,7 @@ export default {
       fontFamily: {
         serif: ['serif'],
         sans: ['"Tiro Bangla"', 'sans-serif'],
-        headline: ['"Tulpen One"', 'sans-serif'],
+        headline: ['"Nunito"', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

@@ -156,7 +156,7 @@ export default function Home() {
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
           <h1 
-            className="font-headline text-8xl font-normal tracking-tighter text-foreground cursor-pointer"
+            className="font-headline text-8xl font-extrabold tracking-widest text-foreground cursor-pointer"
             onClick={() => setIsSettingsOpen(true)}
           >
             grammalyzer
