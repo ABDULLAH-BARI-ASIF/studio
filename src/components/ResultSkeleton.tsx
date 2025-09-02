@@ -1,30 +1,21 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const ResultSkeleton = () => {
   return (
-    <div className="space-y-6">
-      {[1, 2].map((i) => (
-        <Card key={i}>
-          <CardHeader>
-            <CardTitle>
-              <Skeleton className="h-7 w-48" />
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-[80%]" />
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <Card className="border-0 bg-secondary shadow-lg">
+      <CardHeader>
+        <Skeleton className="h-7 w-48" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-[80%]" />
+        <Skeleton className="h-4 w-full mt-4" />
+        <Skeleton className="h-4 w-[90%]" />
+      </CardContent>
+    </Card>
   );
 };
 
