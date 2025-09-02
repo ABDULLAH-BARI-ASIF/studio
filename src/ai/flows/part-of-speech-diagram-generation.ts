@@ -34,7 +34,7 @@ Your analysis must be thorough. Identify not just basic parts of speech, but als
 - Prepositions
 - Interjections
 
-Return the analysis as plain text, clearly indicating each word's detailed part of speech. Do not provide any introduction, conclusion, or markdown formatting.
+Return the analysis as a JSON object that adheres to the output schema.
 
 Sentence: {{{sentence}}}`,
 });

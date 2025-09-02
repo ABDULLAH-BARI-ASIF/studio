@@ -20,7 +20,7 @@ import ResultDisplay from "@/components/ResultDisplay";
 import ResultSkeleton from "@/components/ResultSkeleton";
 import { useToast } from "@/hooks/use-toast";
 
-type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | { diagram: string };
+type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
 export default function Home() {
   const [mode, setMode] = useState<"pos" | "gaps">("pos");
@@ -75,7 +75,7 @@ export default function Home() {
           return;
         }
         const result: PartOfSpeechDiagramOutput = await generatePartOfSpeechDiagram({ sentence: posSentence });
-        setAnalysisResult({ diagram: result.diagram });
+        setAnalysisResult(result);
       } else { // mode === 'gaps'
         if (!gapsQuestion.trim()) {
           toast({ variant: "destructive", title: "Input required", description: "Please enter a question." });
@@ -144,7 +144,7 @@ export default function Home() {
     <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
-          <h1 className="font-headline text-4xl font-bold tracking-tighter text-foreground sm:text-5xl">
+          <h1 className="font-headline text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl">
             Grammalyzer
           </h1>
           <div className="absolute top-0 right-0">
@@ -202,7 +202,7 @@ export default function Home() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
-                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
+                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.g. target.value)} className="focus-visible:ring-primary"/>
                         </div>
                     </div>
                 </CardContent>

@@ -19,7 +19,7 @@ export default {
       fontFamily: {
         sans: ['var(--font-inter)'],
         body: ['var(--font-literata)'],
-        headline: ['var(--font-literata)'],
+        headline: ['var(--font-museo-moderno)'],
         bangla: ['var(--font-tiro-bangla)'],
         code: ['monospace'],
       },
