@@ -1,5 +1,6 @@
 "use client";
 
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
@@ -26,7 +27,7 @@ const renderAnsweredQuestion = (question: string, answer: string) => {
       <span>
         {parts[0]}
         <span className="font-bold text-primary">{answer}</span>
-        {parts[1]}
+        {parts.slice(1).join(' ')}
       </span>
     );
   };
