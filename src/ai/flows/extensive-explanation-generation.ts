@@ -23,11 +23,17 @@ const prompt = ai.definePrompt({
   name: 'extensiveExplanationPrompt',
   input: {schema: ExtensiveExplanationInputSchema},
   output: {schema: ExtensiveExplanationOutputSchema},
-  prompt: `You are an expert English grammar tutor. You will be given a sentence with a blank, the options provided, and the correct answer.
+  prompt: `You are an expert English grammar tutor. You will be given a sentence with a blank, the options provided, and the correct answer. Your response must not contain any markdown formatting.
 
-Your task is to provide a detailed explanation in Bangla. The explanation should cover:
-1.  Why the correct answer is the right fit for the sentence, explaining the relevant grammar rule in detail.
-2.  Why each of the other provided options is incorrect, explaining the grammatical error for each case.
+Your task is to provide an advanced, detailed explanation in Bangla about why the correct answer is the right fit, explaining the relevant grammar rule in detail. 
+
+Also, include some clear examples to illustrate the grammar rule. Always wrap the examples between two separators like this:
+---
+Example 1...
+Example 2...
+---
+
+Do not explain why the other options are incorrect.
 
 Question: {{{question}}}
 Options: {{#each options}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}

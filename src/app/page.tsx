@@ -155,15 +155,12 @@ export default function Home() {
     <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
-          <h1 className="font-headline text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl">
+          <h1 
+            className="font-headline text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl cursor-pointer"
+            onClick={() => setIsSettingsOpen(true)}
+          >
             Grammalyzer
           </h1>
-          <div className="absolute top-0 right-0">
-            <Button variant="ghost" size="icon" onClick={() => setIsSettingsOpen(true)}>
-                <Settings className="h-6 w-6" />
-                <span className="sr-only">Settings</span>
-            </Button>
-          </div>
         </header>
 
         <div className="flex items-center justify-center space-x-4 py-4">
