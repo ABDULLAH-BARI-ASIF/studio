@@ -152,7 +152,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20 font-serif">
+    <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
           <h1 

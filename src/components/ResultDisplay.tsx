@@ -39,14 +39,14 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
         <div className="space-y-6 animate-in fade-in-0 duration-500 font-sans">
             
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground font-serif">Answer</p>
+                <p className="text-sm font-medium text-muted-foreground font-headline">Answer</p>
                 <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md">
                   {renderAnsweredQuestion(result.question, result.correctAnswer)}
                 </div>
             </div>
 
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground font-serif">Simple Explanation</p>
+                <p className="text-sm font-medium text-muted-foreground font-headline">Simple Explanation</p>
                 <p className="text-foreground/90 text-base leading-relaxed">{result.explanation}</p>
             </div>
             
@@ -54,7 +54,7 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
                 <>
                 <Separator />
                 <div className="space-y-2 animate-in fade-in-0 duration-500">
-                    <h3 className="text-lg font-semibold text-primary font-serif">Extensive Explanation</h3>
+                    <h3 className="text-lg font-semibold text-primary font-headline">Extensive Explanation</h3>
                     <div 
                       className="text-foreground/90 text-base whitespace-pre-wrap leading-relaxed prose prose-sm max-w-none" 
                       dangerouslySetInnerHTML={{ __html: result.extensiveExplanation.replace(/---/g, '<hr class="my-4 border-border" />') }} 
@@ -69,7 +69,7 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
   // Part of Speech Diagram
   return (
     <div className="space-y-4 animate-in fade-in-0 duration-500 font-sans">
-        <h2 className="text-xl font-bold tracking-tight text-foreground font-serif">
+        <h2 className="text-xl font-bold tracking-tight text-foreground font-headline">
             Part of Speech Analysis
         </h2>
         <div className="space-y-3 rounded-lg bg-muted p-4">
