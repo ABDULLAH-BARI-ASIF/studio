@@ -17,6 +17,19 @@ function isFillInTheGapsOutput(result: AnalysisResult): result is FillInTheGapsO
     return 'correctAnswer' in result;
 }
 
+const renderAnsweredQuestion = (question: string, answer: string) => {
+    const parts = question.split(/_|-/);
+    if (parts.length < 2) {
+      return <span>{question}</span>;
+    }
+    return (
+      <span>
+        {parts[0]}
+        <span className="font-bold text-primary">{answer}</span>
+        {parts[1]}
+      </span>
+    );
+  };
 
 const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
@@ -26,9 +39,9 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
             
             <div className="space-y-2">
                 <p className="text-sm font-medium text-muted-foreground">Question</p>
-                <p className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md font-sans">
-                    {result.question.replace(/_/g, `__${result.correctAnswer}__`)}
-                </p>
+                <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md font-sans">
+                  {renderAnsweredQuestion(result.question, result.correctAnswer)}
+                </div>
             </div>
 
             <div className="space-y-2">
@@ -57,15 +70,18 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
         </h2>
         <div className="space-y-3 rounded-lg bg-muted p-4">
             {result.analysis.map((item, index) => (
-                <div key={index} className="flex items-center gap-4 text-base">
-                    <span 
-                        className="font-bold text-lg text-primary"
-                    >
-                        {item.word}
-                    </span>
-                    <span className="text-muted-foreground font-medium ">-&gt;</span>
-                    <span className="text-foreground/90">{item.partOfSpeech}</span>
-                </div>
+                <React.Fragment key={index}>
+                    <div className="flex items-baseline gap-2 text-base">
+                        <span 
+                            className="font-bold text-lg text-primary w-32"
+                        >
+                            {item.word}
+                        </span>
+                        <span className="text-muted-foreground font-medium ">:</span>
+                        <span className="text-foreground/90">{item.partOfSpeech}</span>
+                    </div>
+                    {index < result.analysis.length -1 && <Separator className="my-2"/>}
+                </React.Fragment>
             ))}
         </div>
     </div>
