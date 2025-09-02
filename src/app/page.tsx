@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, BrainCircuit, Settings, Sun, Moon, Trash2 } from "lucide-react";
+import { Sparkles, BrainCircuit, Moon, Sun, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -156,10 +156,10 @@ export default function Home() {
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
           <h1 
-            className="font-headline text-5xl font-extrabold tracking-tighter text-foreground sm:text-6xl cursor-pointer"
+            className="font-headline text-8xl font-normal tracking-tighter text-foreground cursor-pointer"
             onClick={() => setIsSettingsOpen(true)}
           >
-            Grammalyzer
+            grammalyzer
           </h1>
         </header>
 
@@ -182,7 +182,7 @@ export default function Home() {
                     placeholder="Type your sentence here... e.g., 'The cat sat on the mat.'"
                     value={posSentence}
                     onChange={(e) => setPosSentence(e.target.value)}
-                    className="min-h-[120px] resize-none text-base focus-visible:ring-primary"
+                    className="min-h-[120px] resize-none text-base focus-visible:ring-primary font-sans"
                     />
                 </CardContent>
             </Card>
@@ -193,13 +193,13 @@ export default function Home() {
               <CardContent className="p-6 space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                  <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y"/>
+                  <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y font-sans"/>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
-                  <Input id="option-a" placeholder="A" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-b" placeholder="B" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-c" placeholder="C" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-d" placeholder="D" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
+                  <Input id="option-a" placeholder="A" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary font-sans"/>
+                  <Input id="option-b" placeholder="B" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary font-sans"/>
+                  <Input id="option-c" placeholder="C" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary font-sans"/>
+                  <Input id="option-d" placeholder="D" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary font-sans"/>
                 </div>
               </CardContent>
             </Card>
@@ -260,7 +260,7 @@ export default function Home() {
                           id="api-key"
                           value={apiKey}
                           onChange={(e) => setApiKey(e.target.value)}
-                          className="col-span-3"
+                          className="col-span-3 font-sans"
                           type="password"
                       />
                   </div>

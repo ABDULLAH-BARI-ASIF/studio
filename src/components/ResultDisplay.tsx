@@ -36,17 +36,17 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
   if (isFillInTheGapsOutput(result)) {
     return (
-        <div className="space-y-6 animate-in fade-in-0 duration-500">
+        <div className="space-y-6 animate-in fade-in-0 duration-500 font-sans">
             
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Answer</p>
+                <p className="text-sm font-medium text-muted-foreground font-serif">Answer</p>
                 <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md">
                   {renderAnsweredQuestion(result.question, result.correctAnswer)}
                 </div>
             </div>
 
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Simple Explanation</p>
+                <p className="text-sm font-medium text-muted-foreground font-serif">Simple Explanation</p>
                 <p className="text-foreground/90 text-base leading-relaxed">{result.explanation}</p>
             </div>
             
@@ -54,7 +54,7 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
                 <>
                 <Separator />
                 <div className="space-y-2 animate-in fade-in-0 duration-500">
-                    <h3 className="text-lg font-semibold text-primary font-sans">Extensive Explanation</h3>
+                    <h3 className="text-lg font-semibold text-primary font-serif">Extensive Explanation</h3>
                     <div 
                       className="text-foreground/90 text-base whitespace-pre-wrap leading-relaxed prose prose-sm max-w-none" 
                       dangerouslySetInnerHTML={{ __html: result.extensiveExplanation.replace(/---/g, '<hr class="my-4 border-border" />') }} 
@@ -68,8 +68,8 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
   // Part of Speech Diagram
   return (
-    <div className="space-y-4 animate-in fade-in-0 duration-500">
-        <h2 className="text-xl font-bold tracking-tight text-foreground font-sans">
+    <div className="space-y-4 animate-in fade-in-0 duration-500 font-sans">
+        <h2 className="text-xl font-bold tracking-tight text-foreground font-serif">
             Part of Speech Analysis
         </h2>
         <div className="space-y-3 rounded-lg bg-muted p-4">
@@ -77,12 +77,12 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
                 <React.Fragment key={index}>
                     <div className="flex items-baseline gap-2 text-base">
                         <span 
-                            className="font-bold text-lg text-primary w-32 font-sans"
+                            className="font-bold text-lg text-primary w-32"
                         >
                             {item.word}
                         </span>
                         <span className="text-muted-foreground font-medium ">:</span>
-                        <span className="text-foreground/90 font-sans">{item.partOfSpeech}</span>
+                        <span className="text-foreground/90">{item.partOfSpeech}</span>
                     </div>
                     {index < result.analysis.length -1 && <Separator className="my-2"/>}
                 </React.Fragment>

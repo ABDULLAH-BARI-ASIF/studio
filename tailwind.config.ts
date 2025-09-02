@@ -17,8 +17,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Tiro Bangla', 'sans-serif'],
-        headline: ['MuseoModerno', 'sans-serif'],
+        serif: ['serif'],
+        sans: ['"Tiro Bangla"', 'sans-serif'],
+        headline: ['"Tulpen One"', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

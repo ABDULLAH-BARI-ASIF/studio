@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'Grammalyzer',
+  title: 'grammalyzer',
   description: 'Analyze sentences, get grammar explanations, and part-of-speech diagrams.',
 };
 
@@ -20,11 +20,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=MuseoModerno:wght@800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Tulpen+One&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className={cn('antialiased font-sans')}>
+      <body className={cn('antialiased font-serif')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Tiro Bangla', sans-serif;
+  font-family: serif;
 }
 
 @layer base {
