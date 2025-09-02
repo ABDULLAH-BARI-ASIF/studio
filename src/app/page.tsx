@@ -152,11 +152,11 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
+    <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20 font-serif">
       <div className="w-full max-w-3xl space-y-8">
         <header className="relative text-center space-y-2">
           <h1 
-            className="font-title text-8xl font-extrabold tracking-widest text-foreground cursor-pointer"
+            className="font-title text-7xl font-extrabold tracking-wider text-foreground cursor-pointer"
             onClick={() => setIsSettingsOpen(true)}
           >
             grammalyzer
