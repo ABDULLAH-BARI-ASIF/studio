@@ -193,30 +193,18 @@ export default function Home() {
 
         {mode === 'gaps' && (
             <Card className="border shadow-lg animate-in fade-in-0 duration-500">
-                <CardContent className="p-6 space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                        <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y"/>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        <div className="space-y-2">
-                            <Label htmlFor="option-a" className="text-sm font-medium text-muted-foreground">Option A (optional)</Label>
-                            <Input id="option-a" placeholder="e.g., on" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary"/>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="option-b" className="text-sm font-medium text-muted-foreground">Option B (optional)</Label>
-                            <Input id="option-b" placeholder="e.g., in" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary"/>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="option-c" className="text-sm font-medium text-muted-foreground">Option C (optional)</Label>
-                            <Input id="option-c" placeholder="e.g., at" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary"/>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
-                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
-                        </div>
-                    </div>
-                </CardContent>
+              <CardContent className="p-6 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
+                  <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y"/>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <Input id="option-a" placeholder="Option A (optional)" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary"/>
+                  <Input id="option-b" placeholder="Option B (optional)" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary"/>
+                  <Input id="option-c" placeholder="Option C (optional)" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary"/>
+                  <Input id="option-d" placeholder="Option D (optional)" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
+                </div>
+              </CardContent>
             </Card>
         )}
 
