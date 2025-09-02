@@ -39,14 +39,14 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
         <div className="space-y-6 animate-in fade-in-0 duration-500">
             
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Question</p>
+                <p className="text-sm font-medium text-muted-foreground">Answer</p>
                 <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md">
                   {renderAnsweredQuestion(result.question, result.correctAnswer)}
                 </div>
             </div>
 
             <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">Brief Explanation (Bangla)</p>
+                <p className="text-sm font-medium text-muted-foreground">Simple Explanation</p>
                 <p className="text-foreground/90 text-base leading-relaxed">{result.explanation}</p>
             </div>
             
