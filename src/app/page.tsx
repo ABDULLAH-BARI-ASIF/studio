@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Sparkles, BrainCircuit } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Sparkles, BrainCircuit, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 
 import { fillInTheGaps, type FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
 import { generatePartOfSpeechDiagram, type PartOfSpeechDiagramOutput } from "@/ai/flows/part-of-speech-diagram-generation";
@@ -34,6 +35,24 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingExplanation, setIsGeneratingExplanation] = useState(false);
   const { toast } = useToast();
+
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+
+  useEffect(() => {
+    // Ensure this runs only on the client
+    const storedApiKey = localStorage.getItem("gemini_api_key") || "";
+    setApiKey(storedApiKey);
+  }, []);
+
+  const handleSaveApiKey = () => {
+    localStorage.setItem("gemini_api_key", apiKey);
+    setIsSettingsOpen(false);
+    toast({
+        title: "API Key Saved",
+        description: "Your Gemini API Key has been updated.",
+    });
+  };
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -74,7 +93,7 @@ export default function Home() {
       toast({
         variant: "destructive",
         title: "Analysis Failed",
-        description: "Something went wrong. Please try again.",
+        description: "Something went wrong. Please check your API key and try again.",
       });
     } finally {
       setIsLoading(false);
@@ -113,10 +132,15 @@ export default function Home() {
   
   const isGapsResult = analysisResult && 'correctAnswer' in analysisResult;
 
+  const handleModeChange = (checked: boolean) => {
+      setMode(checked ? "gaps" : "pos");
+      setAnalysisResult(null);
+  };
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
-        <header className="text-center space-y-2">
+        <header className="relative text-center space-y-2">
            <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm text-secondary-foreground">
             English Grammar AI
           </div>
@@ -126,54 +150,68 @@ export default function Home() {
           <p className="text-lg text-muted-foreground">
             Your intelligent assistant for sentence structures and grammar explanations.
           </p>
+          <div className="absolute top-0 right-0">
+            <Button variant="ghost" size="icon" onClick={() => setIsSettingsOpen(true)}>
+                <Settings className="h-6 w-6" />
+                <span className="sr-only">Settings</span>
+            </Button>
+          </div>
         </header>
 
-        <Tabs defaultValue="pos" onValueChange={(value) => {setMode(value as "pos" | "gaps"); setAnalysisResult(null);}} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-secondary">
-            <TabsTrigger value="pos">Parts of Speech Analyzer</TabsTrigger>
-            <TabsTrigger value="gaps">Fill in the Gaps Explainer</TabsTrigger>
-          </TabsList>
-          <TabsContent value="pos" className="mt-6">
-            <Card className="border-0 bg-secondary shadow-lg">
-              <CardContent className="p-6 space-y-4">
-                <Textarea
-                  placeholder="Type your sentence here... e.g., 'The cat sat on the mat.'"
-                  value={posSentence}
-                  onChange={(e) => setPosSentence(e.target.value)}
-                  className="min-h-[120px] resize-none border-border/50 bg-background/50 text-base focus-visible:ring-primary"
-                />
-              </CardContent>
+        <div className="flex items-center justify-center space-x-4 py-4">
+            <Label htmlFor="mode-switch" className="text-base text-muted-foreground">Parts of Speech Analyzer</Label>
+            <Switch
+                id="mode-switch"
+                checked={mode === 'gaps'}
+                onCheckedChange={handleModeChange}
+                aria-label="Switch between analyzer modes"
+            />
+            <Label htmlFor="mode-switch" className="text-base text-muted-foreground">Fill in the Gaps Explainer</Label>
+        </div>
+
+        {mode === 'pos' && (
+            <Card className="border-0 bg-secondary shadow-lg animate-in fade-in-0 duration-500">
+                <CardContent className="p-6 space-y-4">
+                    <Label className="text-sm font-medium text-muted-foreground">Enter a sentence to analyze</Label>
+                    <Textarea
+                    placeholder="Type your sentence here... e.g., 'The cat sat on the mat.'"
+                    value={posSentence}
+                    onChange={(e) => setPosSentence(e.target.value)}
+                    className="min-h-[120px] resize-none border-border/50 bg-background/50 text-base focus-visible:ring-primary"
+                    />
+                </CardContent>
             </Card>
-          </TabsContent>
-          <TabsContent value="gaps" className="mt-6">
-            <Card className="border-0 bg-secondary shadow-lg">
-              <CardContent className="p-6 space-y-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                    <Input id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
-                 </div>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        )}
+
+        {mode === 'gaps' && (
+            <Card className="border-0 bg-secondary shadow-lg animate-in fade-in-0 duration-500">
+                <CardContent className="p-6 space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="option-a" className="text-sm font-medium text-muted-foreground">Option A (optional)</Label>
-                        <Input id="option-a" placeholder="e.g., on" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
+                        <Input id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="option-b" className="text-sm font-medium text-muted-foreground">Option B (optional)</Label>
-                        <Input id="option-b" placeholder="e.g., in" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div className="space-y-2">
+                            <Label htmlFor="option-a" className="text-sm font-medium text-muted-foreground">Option A (optional)</Label>
+                            <Input id="option-a" placeholder="e.g., on" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="option-b" className="text-sm font-medium text-muted-foreground">Option B (optional)</Label>
+                            <Input id="option-b" placeholder="e.g., in" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="option-c" className="text-sm font-medium text-muted-foreground">Option C (optional)</Label>
+                            <Input id="option-c" placeholder="e.g., at" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
+                            <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
+                        </div>
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="option-c" className="text-sm font-medium text-muted-foreground">Option C (optional)</Label>
-                        <Input id="option-c" placeholder="e.g., at" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="option-d" className="text-sm font-medium text-muted-foreground">Option D (optional)</Label>
-                        <Input id="option-d" placeholder="e.g., under" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="border-border/50 bg-background/50 focus-visible:ring-primary"/>
-                    </div>
-                 </div>
-              </CardContent>
+                </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+        )}
+
 
         <div className="flex justify-center">
             <Button
@@ -212,6 +250,40 @@ export default function Home() {
           )}
         </div>
       </div>
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+          <DialogContent>
+              <DialogHeader>
+                  <DialogTitle>Settings</DialogTitle>
+                  <DialogDescription>
+                      Manage your API configurations here.
+                  </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="api-key" className="text-right">
+                          Gemini API Key
+                      </Label>
+                      <Input
+                          id="api-key"
+                          value={apiKey}
+                          onChange={(e) => setApiKey(e.target.value)}
+                          className="col-span-3"
+                          type="password"
+                      />
+                  </div>
+              </div>
+              <DialogFooter>
+                  <DialogClose asChild>
+                      <Button type="button" variant="secondary">
+                          Cancel
+                      </Button>
+                  </DialogClose>
+                  <Button type="submit" onClick={handleSaveApiKey}>Save changes</Button>
+              </DialogFooter>
+          </DialogContent>
+      </Dialog>
     </main>
   );
 }
+
+    
