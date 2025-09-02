@@ -55,7 +55,10 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
                 <Separator />
                 <div className="space-y-2 animate-in fade-in-0 duration-500">
                     <h3 className="text-lg font-semibold text-primary font-sans">Extensive Explanation</h3>
-                    <p className="text-foreground/90 text-base whitespace-pre-wrap leading-relaxed">{result.extensiveExplanation}</p>
+                    <div 
+                      className="text-foreground/90 text-base whitespace-pre-wrap leading-relaxed prose prose-sm max-w-none" 
+                      dangerouslySetInnerHTML={{ __html: result.extensiveExplanation.replace(/---/g, '<hr class="my-4 border-border" />') }} 
+                    />
                 </div>
                 </>
             )}
