@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Sparkles, BrainCircuit, Moon, Sun, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +24,7 @@ type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) 
 
 const PRESET_API_KEY_1 = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
 const PRESET_API_KEY_2 = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
+const PRESET_API_KEY_3 = "AIzaSyA0m_s643t2K2B5K72i_pZ4v8j1o6Y9c9c";
 
 
 export default function Home() {
@@ -43,6 +44,8 @@ export default function Home() {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [apiKey, setApiKey] = useState("");
+  const apiKeyRef = useRef(apiKey);
+  apiKeyRef.current = apiKey;
   const { theme, setTheme } = useTheme();
 
 
@@ -56,7 +59,7 @@ export default function Home() {
   }, []);
 
   const handleSaveApiKey = () => {
-    localStorage.setItem("gemini_api_key", apiKey);
+    localStorage.setItem("gemini_api_key", apiKeyRef.current);
     setIsSettingsOpen(false);
     toast({
         title: "API Key Saved",
@@ -279,6 +282,7 @@ export default function Home() {
                        <div className="flex gap-2">
                           <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_1)}>Preset 1</Button>
                           <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_2)}>Preset 2</Button>
+                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_3)}>Preset 3</Button>
                         </div>
                       <Input
                           id="api-key"
