@@ -18,10 +18,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Tiro Bangla', 'sans-serif'],
-        body: ['Tiro Bangla', 'sans-serif'],
         headline: ['MuseoModerno', 'sans-serif'],
-        bangla: ['Tiro Bangla', 'sans-serif'],
-        code: ['monospace'],
       },
       colors: {
         border: 'hsl(var(--border))',
