@@ -20,6 +20,7 @@ export default {
         serif: ['serif'],
         sans: ['"Tiro Bangla"', 'sans-serif'],
         headline: ['"Nunito"', 'sans-serif'],
+        title: ['"Tulpen One"', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',

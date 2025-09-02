@@ -20,11 +20,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&family=Tiro+Bangla&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;800&family=Tiro+Bangla&family=Tulpen+One&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className={cn('antialiased font-serif')}>
+      <body className={cn('antialiased font-headline')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />
