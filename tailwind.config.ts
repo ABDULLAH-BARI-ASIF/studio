@@ -17,10 +17,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        body: ['var(--font-literata)'],
-        headline: ['var(--font-museo-moderno)'],
-        bangla: ['var(--font-tiro-bangla)'],
+        sans: ['Tiro Bangla', 'sans-serif'],
+        body: ['Tiro Bangla', 'sans-serif'],
+        headline: ['MuseoModerno', 'sans-serif'],
+        bangla: ['Tiro Bangla', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

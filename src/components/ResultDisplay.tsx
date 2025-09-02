@@ -24,7 +24,7 @@ const renderAnsweredQuestion = (question: string, answer: string) => {
       return <span>{question}</span>;
     }
     return (
-      <span>
+      <span className="font-sans">
         {parts[0]}
         <span className="font-bold text-primary">{answer}</span>
         {parts.slice(1).join(' ')}
@@ -36,11 +36,11 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
 
   if (isFillInTheGapsOutput(result)) {
     return (
-        <div className="space-y-6 animate-in fade-in-0 duration-500 font-bangla">
+        <div className="space-y-6 animate-in fade-in-0 duration-500">
             
             <div className="space-y-2">
                 <p className="text-sm font-medium text-muted-foreground">Question</p>
-                <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md font-sans">
+                <div className="text-foreground/90 text-lg leading-relaxed bg-muted p-4 rounded-md">
                   {renderAnsweredQuestion(result.question, result.correctAnswer)}
                 </div>
             </div>
@@ -66,7 +66,7 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
   // Part of Speech Diagram
   return (
     <div className="space-y-4 animate-in fade-in-0 duration-500">
-        <h2 className="text-xl font-bold tracking-tight text-foreground">
+        <h2 className="text-xl font-bold tracking-tight text-foreground font-sans">
             Part of Speech Analysis
         </h2>
         <div className="space-y-3 rounded-lg bg-muted p-4">
@@ -74,12 +74,12 @@ const ResultDisplay = ({ result }: ResultDisplayProps) => {
                 <React.Fragment key={index}>
                     <div className="flex items-baseline gap-2 text-base">
                         <span 
-                            className="font-bold text-lg text-primary w-32"
+                            className="font-bold text-lg text-primary w-32 font-sans"
                         >
                             {item.word}
                         </span>
                         <span className="text-muted-foreground font-medium ">:</span>
-                        <span className="text-foreground/90">{item.partOfSpeech}</span>
+                        <span className="text-foreground/90 font-sans">{item.partOfSpeech}</span>
                     </div>
                     {index < result.analysis.length -1 && <Separator className="my-2"/>}
                 </React.Fragment>
