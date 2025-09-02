@@ -24,6 +24,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    // This is to fix a bug with the `async_hooks` module not being found.
+    // See https://github.com/firebase/genkit/issues/300
+    if (config.resolve.fallback) {
+      config.resolve.fallback.async_hooks = false;
+    } else {
+      config.resolve.fallback = { async_hooks: false };
+    }
+    return config
+  }
 };
 
 export default nextConfig;

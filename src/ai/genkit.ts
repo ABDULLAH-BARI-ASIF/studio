@@ -1,20 +1,14 @@
-import {genkit, GenerationCommonConfig} from 'genkit';
+'use client';
+import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
-
-// This function is defined in a global scope in a script tag on the page.
-// It's a bit of a hack to get the API key from local storage into the
-// Genkit configuration.
-declare function getApiKey(): string | null;
-
-let apiKey: string | undefined = undefined;
-if (typeof window !== 'undefined') {
-  apiKey = localStorage.getItem('gemini_api_key') || undefined;
-}
 
 export const ai = genkit({
   plugins: [
     googleAI({
-      apiKey: apiKey,
+      apiKey:
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('gemini_api_key') || ''
+          : '',
     }),
   ],
   model: 'googleai/gemini-1.5-flash-latest',
@@ -32,11 +26,11 @@ export const ai = genkit({
     if (apiKey) {
       const urlString = url.toString();
       if (urlString.includes('googleapis.com')) {
-        url = `${urlString}?key=${apiKey}`;
+        const urlWithKey = new URL(urlString);
+        urlWithKey.searchParams.set('key', apiKey);
+        url = urlWithKey;
       }
     }
     return fetch(url, {...options, headers});
   },
 });
-
-    

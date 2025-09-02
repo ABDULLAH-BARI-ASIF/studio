@@ -22,6 +22,10 @@ import { useToast } from "@/hooks/use-toast";
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
+const PRESET_API_KEY_1 = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
+const PRESET_API_KEY_2 = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
+
+
 export default function Home() {
   const [mode, setMode] = useState<"pos" | "gaps">("pos");
   
@@ -46,6 +50,9 @@ export default function Home() {
     // Ensure this runs only on the client
     const storedApiKey = localStorage.getItem("gemini_api_key") || "";
     setApiKey(storedApiKey);
+    if (!storedApiKey) {
+      setIsSettingsOpen(true);
+    }
   }, []);
 
   const handleSaveApiKey = () => {
@@ -55,6 +62,8 @@ export default function Home() {
         title: "API Key Saved",
         description: "Your Gemini API Key has been updated.",
     });
+    // Force a reload to re-initialize Genkit with the new key
+    window.location.reload();
   };
 
   const handleOptionChange = (index: number, value: string) => {
@@ -64,6 +73,17 @@ export default function Home() {
   };
 
   const handleAnalysis = async () => {
+    const storedApiKey = localStorage.getItem("gemini_api_key") || "";
+    if (!storedApiKey) {
+        toast({
+            variant: "destructive",
+            title: "API Key Required",
+            description: "Please set your Gemini API key in the settings first.",
+        });
+        setIsSettingsOpen(true);
+        return;
+    }
+    
     setIsLoading(true);
     setAnalysisResult(null);
 
@@ -154,7 +174,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen w-full flex-col items-center bg-background p-4 sm:p-8 selection:bg-primary/20">
       <div className="w-full max-w-3xl space-y-8">
-        <header className="relative text-center space-y-2">
+        <header className="relative text-center space-y-2 pt-8">
           <h1 
             className="font-title text-7xl font-extrabold tracking-wider text-foreground cursor-pointer"
             onClick={() => setIsSettingsOpen(true)}
@@ -177,12 +197,12 @@ export default function Home() {
         {mode === 'pos' && (
             <Card className="border shadow-lg animate-in fade-in-0 duration-500">
                 <CardContent className="p-6 space-y-4">
-                    <Label className="text-sm font-medium text-muted-foreground">Enter a sentence to analyze</Label>
+                    <Label className="text-sm font-medium text-muted-foreground font-headline">Enter a sentence to analyze</Label>
                     <Textarea
                     placeholder="Type your sentence here... e.g., 'The cat sat on the mat.'"
                     value={posSentence}
                     onChange={(e) => setPosSentence(e.target.value)}
-                    className="min-h-[120px] resize-none text-base focus-visible:ring-primary"
+                    className="min-h-[120px] resize-none text-base focus-visible:ring-primary font-headline"
                     />
                 </CardContent>
             </Card>
@@ -192,14 +212,14 @@ export default function Home() {
             <Card className="border shadow-lg animate-in fade-in-0 duration-500">
               <CardContent className="p-6 space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="question" className="text-sm font-medium text-muted-foreground">Question</Label>
-                  <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y"/>
+                  <Label htmlFor="question" className="text-sm font-medium text-muted-foreground font-headline">Question</Label>
+                  <Textarea id="question" placeholder="e.g., The cat sat _ the mat." value={gapsQuestion} onChange={e => setGapsQuestion(e.target.value)} className="min-h-[80px] focus-visible:ring-primary resize-y font-headline"/>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pt-2">
-                  <Input id="option-a" placeholder="A" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-b" placeholder="B" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-c" placeholder="C" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary"/>
-                  <Input id="option-d" placeholder="D" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary"/>
+                  <Input id="option-a" placeholder="A" value={options[0]} onChange={e => handleOptionChange(0, e.target.value)} className="focus-visible:ring-primary font-headline"/>
+                  <Input id="option-b" placeholder="B" value={options[1]} onChange={e => handleOptionChange(1, e.target.value)} className="focus-visible:ring-primary font-headline"/>
+                  <Input id="option-c" placeholder="C" value={options[2]} onChange={e => handleOptionChange(2, e.target.value)} className="focus-visible:ring-primary font-headline"/>
+                  <Input id="option-d" placeholder="D" value={options[3]} onChange={e => handleOptionChange(3, e.target.value)} className="focus-visible:ring-primary font-headline"/>
                 </div>
               </CardContent>
             </Card>
@@ -210,7 +230,7 @@ export default function Home() {
             <Button
               onClick={handleAnalysis}
               disabled={isLoading || isGeneratingExplanation}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto"
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 sm:w-auto font-headline"
               size="lg"
             >
               <Sparkles className="mr-2 h-5 w-5" />
@@ -232,7 +252,7 @@ export default function Home() {
                           onClick={handleExtensiveExplanation}
                           disabled={isGeneratingExplanation}
                           variant="outline"
-                          className="w-full sm:w-auto ml-auto"
+                          className="w-full sm:w-auto ml-auto font-headline"
                         >
                           <BrainCircuit className="mr-2 h-5 w-5" />
                           {isGeneratingExplanation ? "Generating..." : "Extensive Explanation"}
@@ -244,28 +264,32 @@ export default function Home() {
         </div>
       </div>
       <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-          <DialogContent>
+          <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
               <DialogHeader>
-                  <DialogTitle>Settings</DialogTitle>
-                  <DialogDescription>
+                  <DialogTitle className="font-headline">Settings</DialogTitle>
+                  <DialogDescription className="font-headline">
                       Manage your API and theme configurations here.
                   </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="api-key" className="text-right">
+                  <div className="space-y-2">
+                      <Label htmlFor="api-key" className="font-headline">
                           Gemini API Key
                       </Label>
+                       <div className="flex gap-2">
+                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_1)}>Preset 1</Button>
+                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_2)}>Preset 2</Button>
+                        </div>
                       <Input
                           id="api-key"
                           value={apiKey}
                           onChange={(e) => setApiKey(e.target.value)}
-                          className="col-span-3"
+                          className="col-span-3 font-headline"
                           type="password"
                       />
                   </div>
                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Theme</Label>
+                        <Label className="text-right font-headline">Theme</Label>
                         <div className="col-span-3 flex items-center">
                             <Button variant="outline" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
                                 <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -276,7 +300,7 @@ export default function Home() {
                     </div>
               </div>
               <DialogFooter>
-                  <Button type="submit" onClick={handleSaveApiKey}>Save changes</Button>
+                  <Button type="submit" onClick={handleSaveApiKey} className="font-headline">Save changes</Button>
               </DialogFooter>
           </DialogContent>
       </Dialog>
