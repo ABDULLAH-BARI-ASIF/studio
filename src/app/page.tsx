@@ -164,14 +164,14 @@ export default function Home() {
         </header>
 
         <div className="flex items-center justify-center space-x-4 py-4">
-            <Label htmlFor="mode-switch" className={`text-base transition-colors ${mode === 'pos' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>Parts of Speech Analyzer</Label>
+            <Label htmlFor="mode-switch" className={`flex-1 text-right text-base transition-colors ${mode === 'pos' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>POS analyzer</Label>
             <Switch
                 id="mode-switch"
                 checked={mode === 'gaps'}
                 onCheckedChange={handleModeChange}
                 aria-label="Switch between analyzer modes"
             />
-            <Label htmlFor="mode-switch" className={`text-base transition-colors ${mode === 'gaps' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>Fill in the Gaps Explainer</Label>
+            <Label htmlFor="mode-switch" className={`flex-1 text-left text-base transition-colors ${mode === 'gaps' ? 'text-primary font-semibold' : 'text-muted-foreground'}`}>QUE analyzer</Label>
         </div>
 
         {mode === 'pos' && (
