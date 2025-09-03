@@ -4,7 +4,6 @@
  *
  * - generatePartOfSpeechDiagram - A function that generates the part-of-speech diagram.
  */
-
 import {ai} from '@/ai/genkit';
 import {
   PartOfSpeechDiagramInputSchema,
@@ -14,10 +13,6 @@ import {
 } from '@/ai/schemas/part-of-speech-diagram-schemas';
 
 export {type PartOfSpeechDiagramInput, type PartOfSpeechDiagramOutput};
-
-export async function generatePartOfSpeechDiagram(input: PartOfSpeechDiagramInput): Promise<PartOfSpeechDiagramOutput> {
-  return partOfSpeechDiagramFlow(input);
-}
 
 const prompt = ai.definePrompt({
   name: 'partOfSpeechDiagramPrompt',
@@ -39,7 +34,7 @@ Return the analysis as a JSON object that adheres to the output schema.
 Sentence: {{{sentence}}}`,
 });
 
-const partOfSpeechDiagramFlow = ai.defineFlow(
+export const generatePartOfSpeechDiagram = ai.defineFlow(
   {
     name: 'partOfSpeechDiagramFlow',
     inputSchema: PartOfSpeechDiagramInputSchema,
@@ -47,6 +42,9 @@ const partOfSpeechDiagramFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('Failed to get output from LLM');
+    }
+    return output;
   }
 );

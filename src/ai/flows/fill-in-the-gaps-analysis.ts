@@ -16,10 +16,6 @@ import {
 
 export {type FillInTheGapsInput, type FillInTheGapsOutput};
 
-export async function fillInTheGaps(input: FillInTheGapsInput): Promise<FillInTheGapsOutput> {
-  return fillInTheGapsFlow(input);
-}
-
 const prompt = ai.definePrompt({
   name: 'fillInTheGapsPrompt',
   input: {schema: FillInTheGapsInputSchema},
@@ -44,7 +40,7 @@ Options:
 `,
 });
 
-const fillInTheGapsFlow = ai.defineFlow(
+export const fillInTheGaps = ai.defineFlow(
   {
     name: 'fillInTheGapsFlow',
     inputSchema: FillInTheGapsInputSchema,
@@ -52,6 +48,9 @@ const fillInTheGapsFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return {...output!, question: input.question};
+    if (!output) {
+      throw new Error('Failed to get output from LLM');
+    }
+    return {...output, question: input.question};
   }
 );

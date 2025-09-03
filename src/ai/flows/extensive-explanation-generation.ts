@@ -4,7 +4,6 @@
  *
  * - generateExtensiveExplanation - A function that generates the explanation.
  */
-
 import {ai} from '@/ai/genkit';
 import {
   ExtensiveExplanationInputSchema,
@@ -14,10 +13,6 @@ import {
 } from '@/ai/schemas/extensive-explanation-schemas';
 
 export {type ExtensiveExplanationInput, type ExtensiveExplanationOutput};
-
-export async function generateExtensiveExplanation(input: ExtensiveExplanationInput): Promise<ExtensiveExplanationOutput> {
-  return extensiveExplanationFlow(input);
-}
 
 const prompt = ai.definePrompt({
   name: 'extensiveExplanationPrompt',
@@ -36,12 +31,12 @@ Example 2...
 Do not explain why the other options are incorrect.
 
 Question: {{{question}}}
-Options: {{#each options}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
+Options: {{{options}}}
 Correct Answer: {{{correctAnswer}}}
 `,
 });
 
-const extensiveExplanationFlow = ai.defineFlow(
+export const generateExtensiveExplanation = ai.defineFlow(
   {
     name: 'extensiveExplanationFlow',
     inputSchema: ExtensiveExplanationInputSchema,
@@ -49,6 +44,9 @@ const extensiveExplanationFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error('Failed to get output from LLM');
+    }
+    return output;
   }
 );
