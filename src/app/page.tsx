@@ -8,7 +8,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useTheme } from "next-themes";
 
 import { fillInTheGaps, type FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
@@ -22,8 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
-const PRESET_API_KEY_1 = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
-const PRESET_API_KEY_2 = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
+const DEFAULT_API_KEY = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
 
 
 export default function Home() {
@@ -41,32 +39,17 @@ export default function Home() {
   const [isGeneratingExplanation, setIsGeneratingExplanation] = useState(false);
   const { toast } = useToast();
 
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [apiKey, setApiKey] = useState("");
-  const apiKeyRef = useRef(apiKey);
-  apiKeyRef.current = apiKey;
   const { theme, setTheme } = useTheme();
 
 
   useEffect(() => {
     // Ensure this runs only on the client
-    const storedApiKey = localStorage.getItem("gemini_api_key") || PRESET_API_KEY_2;
-    setApiKey(storedApiKey);
-    if (!localStorage.getItem("gemini_api_key")) {
-      setIsSettingsOpen(true);
+    let storedApiKey = localStorage.getItem("gemini_api_key");
+    if (!storedApiKey) {
+      storedApiKey = DEFAULT_API_KEY;
+      localStorage.setItem("gemini_api_key", storedApiKey);
     }
   }, []);
-
-  const handleSaveApiKey = () => {
-    localStorage.setItem("gemini_api_key", apiKey);
-    setIsSettingsOpen(false);
-    toast({
-        title: "API Key Saved",
-        description: "Your Gemini API Key has been updated.",
-    });
-    // Force a reload to re-initialize Genkit with the new key
-    window.location.reload();
-  };
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -80,9 +63,8 @@ export default function Home() {
         toast({
             variant: "destructive",
             title: "API Key Required",
-            description: "Please set your Gemini API key in the settings first.",
+            description: "No Gemini API key found. The app has been configured with a default key, but you can set your own in your browser's local storage under the key 'gemini_api_key' and refresh the page.",
         });
-        setIsSettingsOpen(true);
         return;
     }
     
@@ -179,9 +161,12 @@ export default function Home() {
         <header className="relative text-center space-y-2 pt-8">
           <h1 
             className="font-title text-7xl font-extrabold tracking-wider text-foreground cursor-pointer"
-            onClick={() => setIsSettingsOpen(true)}
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            title="Toggle Theme"
           >
             grammalyzer
+             <Sun className="inline-block ml-4 h-12 w-12 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+             <Moon className="absolute inline-block ml-4 h-12 w-12 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </h1>
         </header>
 
@@ -265,47 +250,6 @@ export default function Home() {
           )}
         </div>
       </div>
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-          <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
-              <DialogHeader>
-                  <DialogTitle className="font-headline">Settings</DialogTitle>
-                  <DialogDescription className="font-headline">
-                      Manage your API and theme configurations here.
-                  </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                  <div className="space-y-2">
-                      <Label htmlFor="api-key" className="font-headline">
-                          Gemini API Key
-                      </Label>
-                       <div className="flex gap-2">
-                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_1)}>Preset 1</Button>
-                          <Button variant="outline" size="sm" onClick={() => setApiKey(PRESET_API_KEY_2)}>Preset 2</Button>
-                        </div>
-                      <Input
-                          id="api-key"
-                          value={apiKey}
-                          onChange={(e) => setApiKey(e.target.value)}
-                          className="col-span-3 font-headline"
-                          type="password"
-                      />
-                  </div>
-                   <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right font-headline">Theme</Label>
-                        <div className="col-span-3 flex items-center">
-                            <Button variant="outline" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                                <span className="sr-only">Toggle theme</span>
-                            </Button>
-                        </div>
-                    </div>
-              </div>
-              <DialogFooter>
-                  <Button type="submit" onClick={handleSaveApiKey} className="font-headline">Save changes</Button>
-              </DialogFooter>
-          </DialogContent>
-      </Dialog>
         <Button
             onClick={handleClear}
             variant="outline"
