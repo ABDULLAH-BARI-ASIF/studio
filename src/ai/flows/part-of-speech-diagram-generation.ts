@@ -12,7 +12,7 @@ import {
   type PartOfSpeechDiagramOutput,
 } from '@/ai/schemas/part-of-speech-diagram-schemas';
 
-export {type PartOfSpeechDiagramInput, type PartOfSpeechDiagramOutput};
+export type {PartOfSpeechDiagramInput, PartOfSpeechDiagramOutput};
 
 const prompt = ai.definePrompt({
   name: 'partOfSpeechDiagramPrompt',

@@ -12,7 +12,7 @@ import {
   type ExtensiveExplanationOutput,
 } from '@/ai/schemas/extensive-explanation-schemas';
 
-export {type ExtensiveExplanationInput, type ExtensiveExplanationOutput};
+export type {ExtensiveExplanationInput, ExtensiveExplanationOutput};
 
 const prompt = ai.definePrompt({
   name: 'extensiveExplanationPrompt',

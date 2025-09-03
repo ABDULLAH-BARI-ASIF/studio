@@ -14,7 +14,7 @@ import {
   type FillInTheGapsOutput,
 } from '@/ai/schemas/fill-in-the-gaps-schemas';
 
-export {type FillInTheGapsInput, type FillInTheGapsOutput};
+export type {FillInTheGapsInput, FillInTheGapsOutput};
 
 const prompt = ai.definePrompt({
   name: 'fillInTheGapsPrompt',
