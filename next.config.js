@@ -1,4 +1,10 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    require('dotenv').config();
+  } catch (e) {
+    // dotenv is optional in production builds (e.g., Vercel) where it's not installed
+  }
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
