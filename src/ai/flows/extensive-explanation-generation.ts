@@ -18,6 +18,7 @@ const prompt = ai.definePrompt({
   name: 'extensiveExplanationPrompt',
   input: {schema: ExtensiveExplanationInputSchema},
   output: {schema: ExtensiveExplanationOutputSchema},
+  model: 'googleai/gemini-1.5-flash-latest',
   prompt: `You are an expert English grammar tutor. You will be given a sentence with a blank, the options provided, and the correct answer. Your response should use markdown for formatting, but you must not use '#' for headings or '*' for bold/italics.
 
 Your task is to provide an advanced, detailed explanation in Bangla about why the correct answer is the right fit, explaining the relevant grammar rule in detail. 

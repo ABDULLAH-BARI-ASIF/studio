@@ -20,6 +20,7 @@ const prompt = ai.definePrompt({
   name: 'fillInTheGapsPrompt',
   input: {schema: FillInTheGapsInputSchema},
   output: {schema: FillInTheGapsOutputSchema},
+  model: 'googleai/gemini-1.5-flash-latest',
   prompt: `You are an expert English grammar tutor.
 
 You will be given a sentence with a blank indicated by an underscore "_" or a hyphen "-". You may also be given a list of options.

@@ -18,6 +18,7 @@ const prompt = ai.definePrompt({
   name: 'partOfSpeechDiagramPrompt',
   input: {schema: PartOfSpeechDiagramInputSchema},
   output: {schema: PartOfSpeechDiagramOutputSchema},
+  model: 'googleai/gemini-1.5-flash-latest',
   prompt: `You are an expert linguist. Generate a detailed part-of-speech analysis for the following sentence. 
   
 Your analysis must be thorough. Identify not just basic parts of speech, but also more specific categories like:
