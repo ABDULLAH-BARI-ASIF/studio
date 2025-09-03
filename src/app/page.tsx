@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Sparkles, BrainCircuit, Moon, Sun, Trash2 } from "lucide-react";
+import { Sparkles, BrainCircuit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
-const DEFAULT_API_KEY = "AIzaSyDMgSW93xFVPjAYpggeIxunvzDdYO5Bipo";
+const DEFAULT_API_KEY = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
 
 
 export default function Home() {
@@ -165,8 +165,6 @@ export default function Home() {
             title="Toggle Theme"
           >
             grammalyzer
-             <Sun className="inline-block ml-4 h-12 w-12 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-             <Moon className="absolute inline-block ml-4 h-12 w-12 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </h1>
         </header>
 
