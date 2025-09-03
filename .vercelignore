@@ -1,0 +1,13 @@
+# Ignore local files from being uploaded to Vercel builds
+node_modules
+.vscode
+.env
+.env.local
+.env.*.local
+npm-debug.log
+yarn-error.log
+package-lock.json
+pnpm-lock.yaml
+.DS_Store
+out
+.next/cache
