@@ -50,9 +50,9 @@ export default function Home() {
 
   useEffect(() => {
     // Ensure this runs only on the client
-    const storedApiKey = localStorage.getItem("gemini_api_key") || "";
+    const storedApiKey = localStorage.getItem("gemini_api_key") || PRESET_API_KEY_2;
     setApiKey(storedApiKey);
-    if (!storedApiKey) {
+    if (!localStorage.getItem("gemini_api_key")) {
       setIsSettingsOpen(true);
     }
   }, []);
