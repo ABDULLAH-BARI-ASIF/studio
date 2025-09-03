@@ -1,8 +1,8 @@
-# Q Analyzer
+# Grammalyzer
 
-Q Analyzer is a powerful and intuitive tool for analyzing English sentences. Whether you're a student learning grammar or a linguist exploring sentence structure, Q Analyzer provides the insights you need.
+Grammalyzer is a powerful and intuitive tool for analyzing English sentences. Whether you're a student learning grammar or a linguist exploring sentence structure, Q Analyzer provides the insights you need.
 
-This application is built with Next.js and Tailwind CSS, and it uses the Google Gemini API for its analysis capabilities.
+This application is built with Next.js and Tailwind CSS, and it uses the Google Gemma 3 27B for its analysis capabilities.
 
 ## Features
 
