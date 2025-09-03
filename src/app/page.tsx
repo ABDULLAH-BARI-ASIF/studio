@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, BrainCircuit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,9 +21,6 @@ import { useToast } from "@/hooks/use-toast";
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
-const DEFAULT_API_KEY = "AIzaSyC6-XqrGZ6JQbV3kzziK5EED00b9tORhMw";
-
-
 export default function Home() {
   const [mode, setMode] = useState<"pos" | "gaps">("pos");
   
@@ -41,16 +38,6 @@ export default function Home() {
 
   const { theme, setTheme } = useTheme();
 
-
-  useEffect(() => {
-    // Ensure this runs only on the client
-    let storedApiKey = localStorage.getItem("gemini_api_key");
-    if (!storedApiKey) {
-      storedApiKey = DEFAULT_API_KEY;
-      localStorage.setItem("gemini_api_key", storedApiKey);
-    }
-  }, []);
-
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
     newOptions[index] = value;
@@ -58,16 +45,6 @@ export default function Home() {
   };
 
   const handleAnalysis = async () => {
-    const storedApiKey = localStorage.getItem("gemini_api_key") || "";
-    if (!storedApiKey) {
-        toast({
-            variant: "destructive",
-            title: "API Key Required",
-            description: "No Gemini API key found. The app has been configured with a default key, but you can set your own in your browser's local storage under the key 'gemini_api_key' and refresh the page.",
-        });
-        return;
-    }
-    
     setIsLoading(true);
     setAnalysisResult(null);
 
