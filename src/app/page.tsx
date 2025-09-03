@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
-const DEFAULT_API_KEY = "AIzaSyBYk4kQ3cJYnZZM2OMZU5h9z4pqkHR4LdE";
+const DEFAULT_API_KEY = "AIzaSyCExDNc5Sv680esXiNFev7_d10xP_MYy44";
 
 
 export default function Home() {
