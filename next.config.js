@@ -2,6 +2,7 @@ require('dotenv').config();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -10,6 +11,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,12 +26,6 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  webpack: (config, {isServer}) => {
-    if (isServer) {
-      config.externals.push('async_hooks');
-    }
-    return config;
   },
 };
 

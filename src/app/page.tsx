@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, BrainCircuit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,16 +10,52 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "next-themes";
 
-import { fillInTheGaps, type FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
-import { generatePartOfSpeechDiagram, type PartOfSpeechDiagramOutput } from "@/ai/flows/part-of-speech-diagram-generation";
-import { generateExtensiveExplanation, type ExtensiveExplanationInput, type ExtensiveExplanationOutput } from "@/ai/flows/extensive-explanation-generation";
-
-
 import ResultDisplay from "@/components/ResultDisplay";
 import ResultSkeleton from "@/components/ResultSkeleton";
 import { useToast } from "@/hooks/use-toast";
 
+// TYPE DEFINITIONS
+export type PartOfSpeechDiagramOutput = {
+  analysis: { word: string; partOfSpeech: string }[];
+};
+
+export type FillInTheGapsOutput = {
+  question: string;
+  correctAnswer: string;
+  explanation: string;
+};
+
+export type ExtensiveExplanationOutput = {
+  explanation: string;
+};
+
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
+
+const callGenerativeAI = async (apiKey: string, prompt: string, jsonResponse: boolean = true) => {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+  const headers = { 'Content-Type': 'application/json' };
+  const body = {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: jsonResponse ? { response_mime_type: 'application/json' } : {},
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    console.error("API Error Response:", errorBody);
+    throw new Error(`API request failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  const text = data.candidates[0].content.parts[0].text;
+  return JSON.parse(text);
+};
+
 
 export default function Home() {
   const [mode, setMode] = useState<"pos" | "gaps">("pos");
@@ -31,12 +67,18 @@ export default function Home() {
   const [gapsQuestion, setGapsQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
 
+  const [apiKey, setApiKey] = useState("");
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingExplanation, setIsGeneratingExplanation] = useState(false);
   const { toast } = useToast();
 
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    const storedApiKey = localStorage.getItem("gemini_api_key") || "AIzaSyC6-XqrGZ6JQbV3kzziK5EED00b9tORhMw";
+    setApiKey(storedApiKey);
+  }, []);
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -45,6 +87,10 @@ export default function Home() {
   };
 
   const handleAnalysis = async () => {
+    if (!apiKey) {
+      toast({ variant: "destructive", title: "API Key is missing", description: "Please set your Gemini API key." });
+      return;
+    }
     setIsLoading(true);
     setAnalysisResult(null);
 
@@ -55,8 +101,24 @@ export default function Home() {
           setIsLoading(false);
           return;
         }
-        const result: PartOfSpeechDiagramOutput = await generatePartOfSpeechDiagram({ sentence: posSentence });
+        const prompt = `You are an expert linguist. Generate a detailed part-of-speech analysis for the following sentence. 
+  
+Your analysis must be thorough. Identify not just basic parts of speech, but also more specific categories like:
+- Proper nouns
+- Tenses (e.g., present continuous, past perfect)
+- Modal verbs
+- Articles
+- Conjunctions (coordinating, subordinating)
+- Prepositions
+- Interjections
+
+Return the analysis as a JSON object that adheres to this structure: { "analysis": [{ "word": "string", "partOfSpeech": "string" }] }
+
+Sentence: ${posSentence}`;
+        
+        const result: PartOfSpeechDiagramOutput = await callGenerativeAI(apiKey, prompt);
         setAnalysisResult(result);
+
       } else { // mode === 'gaps'
         if (!gapsQuestion.trim()) {
           toast({ variant: "destructive", title: "Input required", description: "Please enter a question." });
@@ -69,8 +131,29 @@ export default function Home() {
             return;
         }
         const filledOptions = options.filter(opt => opt.trim() !== '');
-        const result: FillInTheGapsOutput = await fillInTheGaps({ question: gapsQuestion, options: filledOptions.length > 0 ? filledOptions : undefined });
-        setAnalysisResult(result);
+
+        let optionsText = "";
+        if (filledOptions.length > 0) {
+            optionsText = `Options:\n- ${filledOptions.join('\n- ')}`;
+        }
+
+        const prompt = `You are an expert English grammar tutor.
+
+You will be given a sentence with a blank indicated by an underscore "_" or a hyphen "-". You may also be given a list of options.
+
+Your task is to:
+1.  Determine the correct word or phrase to fill in the blank. If options are provided, choose the correct one.
+2.  Provide a brief explanation in Bangla of the grammar rule that applies to the sentence.
+3.  Return the original question in your response.
+
+Return a JSON object matching this structure: { "question": "string", "correctAnswer": "string", "explanation": "string" }
+
+Question: ${gapsQuestion}
+
+${optionsText}
+`;
+        const result: FillInTheGapsOutput = await callGenerativeAI(apiKey, prompt);
+        setAnalysisResult({...result, question: gapsQuestion});
       }
     } catch (error) {
       console.error("Analysis failed:", error);
@@ -100,12 +183,26 @@ export default function Home() {
 
     setIsGeneratingExplanation(true);
     try {
-        const input: ExtensiveExplanationInput = {
-            question: analysisResult.question,
-            options: options.filter(opt => opt.trim() !== ''),
-            correctAnswer: analysisResult.correctAnswer
-        };
-        const result: ExtensiveExplanationOutput = await generateExtensiveExplanation(input);
+        const prompt = `You are an expert English grammar tutor. You will be given a sentence with a blank, the options provided, and the correct answer. Your response should use markdown for formatting, but you must not use '#' for headings or '*' for bold/italics.
+
+Your task is to provide an advanced, detailed explanation in Bangla about why the correct answer is the right fit, explaining the relevant grammar rule in detail. 
+
+Also, include some clear examples to illustrate the grammar rule. Always wrap the examples between two markdown horizontal rules like this:
+---
+Example 1...
+Example 2...
+---
+
+Do not explain why the other options are incorrect.
+
+Return a JSON object matching this structure: { "explanation": "string" }
+
+Question: ${analysisResult.question}
+Options: ${options.filter(opt => opt.trim() !== '').join(', ')}
+Correct Answer: ${analysisResult.correctAnswer}
+`;
+
+        const result: ExtensiveExplanationOutput = await callGenerativeAI(apiKey, prompt);
         setAnalysisResult(prev => {
             if (prev && 'correctAnswer' in prev) {
                 return {...prev, extensiveExplanation: result.explanation};

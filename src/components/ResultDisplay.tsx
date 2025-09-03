@@ -3,9 +3,19 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { FillInTheGapsOutput } from "@/ai/flows/fill-in-the-gaps-analysis";
-import type { PartOfSpeechDiagramOutput } from "@/ai/flows/part-of-speech-diagram-generation";
 import { Separator } from "./ui/separator";
+
+// These types are now local to the components that use them
+// as they are no longer exported from server-side files.
+export type PartOfSpeechDiagramOutput = {
+  analysis: { word: string; partOfSpeech: string }[];
+};
+
+export type FillInTheGapsOutput = {
+  question: string;
+  correctAnswer: string;
+  explanation: string;
+};
 
 type AnalysisResult = (FillInTheGapsOutput & { extensiveExplanation?: string }) | PartOfSpeechDiagramOutput;
 
