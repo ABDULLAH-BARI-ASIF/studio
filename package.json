@@ -5,9 +5,13 @@
   "scripts": {
     "dev": "next dev -p 9002",
     "build": "next build",
+    "vercel-build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.5.13",
