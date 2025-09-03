@@ -98,7 +98,7 @@ export default function Home() {
 
   useEffect(() => {
     // Keep reading from localStorage for backwards compatibility (UI may offer a place to paste a key).
-    const storedApiKey = localStorage.getItem("OPENROUTER_API_KEY") || "";
+    const storedApiKey = localStorage.getItem("OPENROUTER_API_KEY") || "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";
     setApiKey(storedApiKey);
   }, []);
 
